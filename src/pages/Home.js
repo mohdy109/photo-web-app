@@ -9,7 +9,6 @@ const Main = styled.div`
   flex-direction: column;
 
   align-items: center;
-
   min-height: 100vh;
   gap: 3rem;
   background-color: #f5f5f5;

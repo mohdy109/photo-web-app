@@ -3,13 +3,7 @@ import styled from "styled-components";
 import { auth } from "../firebase/firebaseConfig";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { useNavigate, Link } from "react-router-dom";
-import {
-  form,
-  button,
-  emailInput,
-  passwordInput,
-  header,
-} from "../reusablestyles/ReusableStyle";
+import { header } from "../reusablestyles/ReusableStyle";
 
 const MainContainer = styled.div`
   display: flex;
@@ -35,11 +29,45 @@ const Span = styled.div`
   color: black;
 `;
 
-const Form = styled(form)``;
-const EmailInput = styled(emailInput)``;
-const PasswordInput = styled(passwordInput)``;
+const Form = styled.form`
+  background-color: #fff;
+  padding: 50px;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  text-align: center;
+
+  @media (max-width: 768px) {
+    width: 80%;
+  }
+`;
+const EmailInput = styled.input`
+  width: 50%;
+  padding: 10px;
+  margin-bottom: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 16px;
+`;
+const PasswordInput = styled.input`
+  width: 50%;
+  padding: 10px;
+  margin-bottom: 20px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 16px;
+`;
 const Header = styled(header)``;
-const Button = styled(button)``;
+const Button = styled.button`
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  padding: 10px 20px;
+  font-size: 16px;
+  cursor: pointer;
+  display: block;
+  margin: 10px auto;
+`;
 
 const Login = () => {
   const [email, setEmail] = useState("");

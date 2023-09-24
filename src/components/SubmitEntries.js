@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { storage } from "../firebase/firebaseConfig";
 import { auth } from "../firebase/firebaseConfig";
@@ -7,14 +7,9 @@ import { firestoreDb } from "../firebase/firebaseConfig";
 import { addDoc, collection } from "firebase/firestore";
 import { useRef } from "react";
 import { signOut } from "firebase/auth";
+import { onAuthStateChanged } from "firebase/auth";
 import { useNavigate } from "react-router-dom";
-import {
-  button,
-  emailInput,
-  flex,
-  form,
-  header,
-} from "../reusablestyles/ReusableStyle";
+import { flex, header } from "../reusablestyles/ReusableStyle";
 
 const MainContainer = styled.div`
   display: flex;
@@ -23,7 +18,17 @@ const MainContainer = styled.div`
   justify-content: center;
 `;
 
-const Form = styled(form)``;
+const Form = styled.form`
+  background-color: #fff;
+  padding: 50px;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  text-align: center;
+
+  @media (max-width: 768px) {
+    width: 80%;
+  }
+`;
 
 const Loader = styled.div`
   font-size: 30px;
@@ -33,15 +38,38 @@ const Loader = styled.div`
 
 const Header = styled(header)``;
 
-const NameInput = styled(emailInput)``;
-
-const ImageInput = styled(emailInput)``;
-
-const Button = styled(button)`
-  margin-left: 8rem;
+const NameInput = styled.input`
+  width: 50%;
+  padding: 10px;
+  margin-bottom: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 16px;
 `;
 
-const Logout = styled(button)`
+const ImageInput = styled.input`
+  width: 50%;
+  padding: 10px;
+  margin-bottom: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 16px;
+`;
+
+const Button = styled.button`
+  margin-left: 8rem;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  padding: 10px 20px;
+  font-size: 16px;
+  cursor: pointer;
+  display: block;
+  margin: 10px auto;
+`;
+
+const Logout = styled.button`
   background-color: #ff5733;
   color: #fff;
   border: none;
@@ -49,7 +77,10 @@ const Logout = styled(button)`
   margin-right: 7.5rem;
   border-radius: 4px;
   font-size: 16px;
-  cursor: pointer;
+  position: relative;
+
+  margin-left: 7.5rem;
+  margin-top: -3rem;
 `;
 const Flex = styled(flex)``;
 
@@ -57,15 +88,18 @@ const SubmitEntry = () => {
   const [name, setName] = useState("");
   const [image, setImage] = useState(null);
   const [loading, setLoading] = useState(false);
-  const navigate = useNavigate();
 
-  const logOut = () => {
-    signOut(auth)
-      .then(() => {
-        console.log("Successful logout");
-        navigate("/login");
-      })
-      .catch((err) => console.log(err));
+  const logOut = async () => {
+    try {
+      setName("");
+      setImage(null); 
+      setLoading(false);
+      await signOut(auth);
+      console.log("Successful logout");
+   
+    } catch (err) {
+      console.error(err);
+    }
   };
 
   const fileInputRef = useRef(null);
@@ -114,9 +148,9 @@ const SubmitEntry = () => {
         />
         <Flex>
           <Button type="submit">Submit</Button>
-          <Logout onClick={logOut}>LOG OUT</Logout>
         </Flex>
       </Form>
+      <Logout onClick={logOut}>LOG OUT</Logout>
       {loading && <Loader>Loading...</Loader>}
     </MainContainer>
   );
